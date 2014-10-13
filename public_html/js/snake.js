@@ -1,3 +1,8 @@
+/*-----------------------------------------------------------------------------
+ * Variables
+ *----------------------------------------------------------------------------- 
+ */
+
 var snake;
 var snakeLength;
 var snakeSize;
@@ -7,12 +12,18 @@ var food;
 var context;
 var screenHeight;
 var screenWidth;
-
+/*-----------------------------------------------------------------------------
+ * Game Code
+ *-----------------------------------------------------------------------------
+ */
 gameInitialize();
 snakeInitialize();
 foodInitialize();
 setInterval(gameLoop, 1000/15);
-
+/*-----------------------------------------------------------------------------
+ * Snake Functions
+ *-----------------------------------------------------------------------------
+ */
 function gameInitialize() {
     var canvas = document.getElementById("game-screen");
     context = canvas.getContext("2d");
@@ -66,15 +77,28 @@ function snakeUpdate() {
     snakeTail.y = snakeHeadY;
     snake.unshift(snakeTail);
 }
+/*-----------------------------------------------------------------------------
+ * Food Functions
+ *-----------------------------------------------------------------------------
+ */
 
 function foodInitialize() {
     food = {
         x: 0,
         y: 0
     };
+    setFoodPosition();
 }
 
 function foodDraw() {
     contnext.fillStyle = "white";
-    context.fillRect(food.x, food.y, snakeSize, snakeSize) 
+    context.fillRect(food.x, food.y, snakeSize, snakeSize);
+}
+
+function setFoodPosition() {
+    var randomX = Math.floor(Math.random() * screenWidth);
+    var randomY = Math.floor(Math.random() * screenLength);
+        
+    food.x = randomX;
+    food.y = randomY;
 }
