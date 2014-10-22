@@ -36,7 +36,7 @@ function gameInitialize() {
     canvas.width = screenWidth;
     canvas.height = screenHeight;
     
-    document.addEventListener("keydown", snakeMovement)
+    document.addEventListener("keydown", snakeMovement);
 }
 
 function gameLoop() {
@@ -67,7 +67,7 @@ function snakeInitialize() {
 
 function snakeDraw() {
     for(var index = 0; index < snake.length; index++) {
-        context.fillStyle = "white";
+        context.fillStyle = "red";
         context.fillRect(snake[index].x * snakeSize, snake[index].y * snakeSize, snakeSize, snakeSize) ;
     }
 }
@@ -130,7 +130,7 @@ function foodInitialize() {
 }
 
 function foodDraw() {
-    context.fillStyle = "white";
+    context.fillStyle = "blue";
     context.fillRect(food.x * snakeSize, food.y * snakeSize, snakeSize, snakeSize);
 }
 
@@ -175,6 +175,7 @@ function checkFoodCollision(snakeHeadX,snakeHeadY) {
             y: 0
         });
         snakeLength++;
+        setFoodPosition();
     }
 }
 function checkWallCollision(snakeHeadX, snakeHeadY){
