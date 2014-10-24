@@ -15,6 +15,8 @@ var food;
 var context;
 var screenHeight;
 var screenWidth;
+
+var gameState
 /*-----------------------------------------------------------------------------
  * Game Code
  *-----------------------------------------------------------------------------
@@ -23,7 +25,7 @@ gameInitialize();
 snakeInitialize();
 foodInitialize();
 snakeUpdate();
-setInterval(gameLoop, 1000/15);
+setInterval(gameLoop, 1000 / 15);
 /*-----------------------------------------------------------------------------
  * Snake Functions
  *-----------------------------------------------------------------------------
@@ -31,21 +33,25 @@ setInterval(gameLoop, 1000/15);
 function gameInitialize() {
     var canvas = document.getElementById("game-screen");
     context = canvas.getContext("2d");
-    
+
     screenWidth = window.innerWidth;
     screenHeight = window.innerHeight;
-    
+
     canvas.width = screenWidth;
     canvas.height = screenHeight;
-    
+
     document.addEventListener("keydown", snakeMovement);
+    
+    setState("PLAY");
 }
 
 function gameLoop() {
     gameDraw();
-    snakeUpdate();
-    snakeDraw();
-    foodDraw();
+    if (gameState == "PLAY") {
+        snakeUpdate();
+        snakeDraw();
+        foodDraw();
+    }
 }
 
 function gameDraw() {
@@ -58,50 +64,50 @@ function snakeInitialize() {
     snakeLength = 5;
     snakeSize = 20;
     snakeDirection = "right";
-    
-    for(var index = snakeLength - 1; index >= 0; index--) {
-        snake.push( {
+
+    for (var index = snakeLength - 1; index >= 0; index--) {
+        snake.push({
             x: index,
             y: 0
-        }) ;
+        });
     }
 }
 
 function snakeDraw() {
-    for(var index = 0; index < snake.length; index++) {
+    for (var index = 0; index < snake.length; index++) {
         context.fillStyle = "red";
-        context.fillRect(snake[index].x * snakeSize, snake[index].y * snakeSize, snakeSize, snakeSize) ;
+        context.fillRect(snake[index].x * snakeSize, snake[index].y * snakeSize, snakeSize, snakeSize);
     }
 }
 
 function snakeUpdate(snakeHeadX, snakeHeadY) {
     var snakeHeadX = snake[0].x;
     var snakeHeadY = snake[0].y;
-    
-    if(snakeDirection == "right") {
+
+    if (snakeDirection == "right") {
         snakeHeadX++;
     }
-    else if(snakeDirection == "down") {
+    else if (snakeDirection == "down") {
         snakeHeadY++;
     }
-    else if(snakeDirection == "up") {
+    else if (snakeDirection == "up") {
         snakeHeadY--;
     }
-    else if(snakeDirection == "left") {
+    else if (snakeDirection == "left") {
         snakeHeadX--;
     }
-    
+
     checkFoodCollision(snakeHeadX, snakeHeadY);
     checkWallCollision(snakeHeadX, snakeHeadY);
-    
-    var snakeTail = snake.pop() ;
+
+    var snakeTail = snake.pop();
     snakeTail.x = snakeHeadX;
     snakeTail.y = snakeHeadY;
     snake.unshift(snakeTail);
 }
 
 function snakeMovement(event) {
-    if (event.keyCode == '38'){
+    if (event.keyCode == '38') {
         //up
         snakeDirection = "up";
     }
@@ -136,10 +142,10 @@ function foodDraw() {
     context.fillRect(food.x * snakeSize, food.y * snakeSize, snakeSize, snakeSize);
 }
 
-    function setFoodPosition() {
+function setFoodPosition() {
     var randomX = Math.floor(Math.random() * screenWidth);
     var randomY = Math.floor(Math.random() * screenHeight);
-        
+
     food.x = Math.floor(randomX / snakeSize);
     food.y = Math.floor(randomY / snakeSize);
 }
@@ -151,16 +157,16 @@ function foodDraw() {
 function keyboardHandler(event) {
     console.log(event);
     //Prevents the snake from going back on itself
-    if(event.keyCode == 39 && snakeDirection != "left") {
+    if (event.keyCode == 39 && snakeDirection != "left") {
         snakeDirection = "right";
     }
-    else if(event.keyCode == 40 && snakeDirection != "up") {
+    else if (event.keyCode == 40 && snakeDirection != "up") {
         snakeDirection = "down";
     }
-    else if(event.keyCode == 37 && snakeDirection !=" right") {
+    else if (event.keyCode == 37 && snakeDirection != " right") {
         snakeDirection = "left";
     }
-    else if(event.keyCode == 38 && snakeDirection != "down") {
+    else if (event.keyCode == 38 && snakeDirection != "down") {
         snakeDirection = "up";
     }
 }
@@ -170,8 +176,8 @@ function keyboardHandler(event) {
  *------------------------------------------------------------------------------
  */
 
-function checkFoodCollision(snakeHeadX,snakeHeadY) {
-    if(snakeHeadX == food.x && snakeHeadY == food.y) {
+function checkFoodCollision(snakeHeadX, snakeHeadY) {
+    if (snakeHeadX == food.x && snakeHeadY == food.y) {
         snake.push({
             x: 0,
             y: 0
@@ -180,8 +186,23 @@ function checkFoodCollision(snakeHeadX,snakeHeadY) {
         setFoodPosition();
     }
 }
-function checkWallCollision(snakeHeadX, snakeHeadY){
-    if(snakeHeadX * snakeSize >= screenWidth) {
-        console.log("Wall Collision");
+function checkWallCollision(snakeHeadX, snakeHeadY) {
+    if (snakeHeadX * snakeSize >= screenWidth) {
+        setState("GAME OVER");
     }
+}
+function checkSnakeCollisions(snakeHeadX, snakeHeadY) {
+    for (var index = 1; index < snake.length; index++) {
+        if (snakeHeadX == snake[index].x && snakeHeadY == snake[index].y) {
+            setState("GAME OVER");
+            return;
+        }
+    }
+}
+/*------------------------------------------------------------------------------
+ *Game State Handler
+ *------------------------------------------------------------------------------
+ */
+function setState(state) {
+    gameState = state;
 }
