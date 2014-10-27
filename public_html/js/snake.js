@@ -16,7 +16,8 @@ var context;
 var screenHeight;
 var screenWidth;
 
-var gameState
+var gameState;
+var gameOverMenu;
 /*-----------------------------------------------------------------------------
  * Game Code
  *-----------------------------------------------------------------------------
@@ -41,6 +42,8 @@ function gameInitialize() {
     canvas.height = screenHeight;
 
     document.addEventListener("keydown", snakeMovement);
+    
+    gameOverMenu = document.getElementById("gameOver");
     
     setState("PLAY");
 }
@@ -205,4 +208,14 @@ function checkSnakeCollisions(snakeHeadX, snakeHeadY) {
  */
 function setState(state) {
     gameState = state;
+}
+
+function displayMenu(menu) {
+    menu.style.visibility = ("visible");
+}
+
+function showMenu(state) {
+    if(state == "gameOver") {
+        displayMenu(gameOverMenu);
+    }
 }
