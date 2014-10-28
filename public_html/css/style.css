@@ -12,3 +12,6 @@ body{
     visibility: hidden;
 }
 
+h1, h3 {
+    font-family: 'Lobster', cursive;
+}

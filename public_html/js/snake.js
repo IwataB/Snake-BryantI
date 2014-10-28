@@ -26,7 +26,7 @@ gameInitialize();
 snakeInitialize();
 foodInitialize();
 snakeUpdate();
-setInterval(gameLoop, 1000 / 15);
+setInterval(gameLoop, 1000 / 30);
 /*-----------------------------------------------------------------------------
  * Snake Functions
  *-----------------------------------------------------------------------------
@@ -60,6 +60,13 @@ function gameLoop() {
 function gameDraw() {
     context.fillStyle = "rgb(63, 227, 34)";
     context.fillRect(0, 0, screenWidth, screenHeight);
+}
+
+function gameRestart() {
+    snakeInitialize();
+    foodInitialize();
+    hideMenu(gameOverMenu);
+    setState("PLAY"); 
 }
 
 function snakeInitialize() {
@@ -190,7 +197,7 @@ function checkFoodCollision(snakeHeadX, snakeHeadY) {
     }
 }
 function checkWallCollision(snakeHeadX, snakeHeadY) {
-    if (snakeHeadX * snakeSize >= screenWidth) {
+    if (snakeHeadX * snakeSize >= screenWidth  || snakeHeadX * snakeSize < 0) {
         setState("GAME OVER");
     }
 }
@@ -208,10 +215,11 @@ function checkSnakeCollisions(snakeHeadX, snakeHeadY) {
  */
 function setState(state) {
     gameState = state;
+    showMenu(state);
 }
 
 function displayMenu(menu) {
-    menu.style.visibility = ("visible");
+    menu.style.visibility = "visible";
 }
 
 function showMenu(state) {
