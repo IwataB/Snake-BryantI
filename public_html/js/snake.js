@@ -3,8 +3,6 @@
  *----------------------------------------------------------------------------- 
  */
 
-//Hai
-
 var snake;
 var snakeLength;
 var snakeSize;
@@ -18,6 +16,7 @@ var screenWidth;
 
 var gameState;
 var gameOverMenu;
+var restartButton;
 /*-----------------------------------------------------------------------------
  * Game Code
  *-----------------------------------------------------------------------------
@@ -44,6 +43,10 @@ function gameInitialize() {
     document.addEventListener("keydown", snakeMovement);
     
     gameOverMenu = document.getElementById("gameOver");
+    centerMenuPosition(gameOverMenu);
+    
+    restartButton = document.getElementById("restartButton");
+    restartButton.addEventListener("click", gameRestart);
     
     setState("PLAY");
 }
@@ -200,9 +203,12 @@ function checkWallCollision(snakeHeadX, snakeHeadY) {
     if (snakeHeadX * snakeSize >= screenWidth  || snakeHeadX * snakeSize < 0) {
         setState("GAME OVER");
     }
+    if (snakeHeadY * snakeSize >= screenWidth || snakeHeadY * snakeSize < 0) {
+        setState("GAME OVER")
+    }
 }
 function checkSnakeCollisions(snakeHeadX, snakeHeadY) {
-    for (var index = 1; index < snake.length; index++) {
+    for(var index = 1; index < snake.length; index++) {
         if (snakeHeadX == snake[index].x && snakeHeadY == snake[index].y) {
             setState("GAME OVER");
             return;
@@ -223,7 +229,12 @@ function displayMenu(menu) {
 }
 
 function showMenu(state) {
-    if(state == "gameOver") {
+    if(state == "GAME OVER") {
         displayMenu(gameOverMenu);
     }
+}
+
+function centerMenuPosition(menu) {
+    menu.style.top = (screenHeight / 2) - (menu.offsetHeight / 2) + "px";
+    menu.style.left = (screenWidth / 2) - (menu.offsetWidth / 2) + "px";
 }

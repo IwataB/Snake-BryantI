@@ -14,4 +14,23 @@ body{
 
 h1, h3 {
     font-family: 'Lobster', cursive;
+    font-size: 35px;
+    text-alin: center;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.title {
+    font-size: 60px;
+}
+
+#restartButton {
+    border-style: solid;
+    border-color: white;
+    border-radius: 10px;
+}
+
+#restartButton:hover {
+    background-color: red;
+    border-radius: 10px;
 }
