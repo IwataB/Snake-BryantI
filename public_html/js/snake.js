@@ -51,6 +51,11 @@ function gameInitialize() {
     setState("PLAY");
 }
 
+function gameRestart() {
+    snakeInitialize();
+    foodInitialize();
+    setState("PLAY");
+}
 function gameLoop() {
     gameDraw();
     if (gameState == "PLAY") {
@@ -204,7 +209,7 @@ function checkWallCollision(snakeHeadX, snakeHeadY) {
         setState("GAME OVER");
     }
     if (snakeHeadY * snakeSize >= screenWidth || snakeHeadY * snakeSize < 0) {
-        setState("GAME OVER")
+        setState("GAME OVER");
     }
 }
 function checkSnakeCollisions(snakeHeadX, snakeHeadY) {

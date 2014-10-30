@@ -7,7 +7,7 @@ body{
     display: block;
 }
 
-#gameOver {
+#gameOver, #playHUD {
     position: absolute;
     visibility: hidden;
 }
