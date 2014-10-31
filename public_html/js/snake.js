@@ -17,6 +17,9 @@ var screenWidth;
 var gameState;
 var gameOverMenu;
 var restartButton;
+var playHUD;
+var scoreboard;
+
 /*-----------------------------------------------------------------------------
  * Game Code
  *-----------------------------------------------------------------------------
@@ -48,33 +51,32 @@ function gameInitialize() {
     restartButton = document.getElementById("restartButton");
     restartButton.addEventListener("click", gameRestart);
     
+    playHUD = document.getElementById("playHUD");
+    scoreboard = document.getElementById("scoreboard");
+    
     setState("PLAY");
-}
-
-function gameRestart() {
-    snakeInitialize();
-    foodInitialize();
-    setState("PLAY");
-}
-function gameLoop() {
-    gameDraw();
-    if (gameState == "PLAY") {
-        snakeUpdate();
-        snakeDraw();
-        foodDraw();
-    }
-}
-
-function gameDraw() {
-    context.fillStyle = "rgb(63, 227, 34)";
-    context.fillRect(0, 0, screenWidth, screenHeight);
 }
 
 function gameRestart() {
     snakeInitialize();
     foodInitialize();
     hideMenu(gameOverMenu);
-    setState("PLAY"); 
+    setState("PLAY");
+}
+function gameLoop() {
+    gameDraw();
+    drawScoreboard();
+    if (gameState == "PLAY") {
+        snakeUpdate();
+        snakeDraw();
+        foodDraw();
+        keyboardHandler();
+    }
+}
+
+function gameDraw() {
+    context.fillStyle = "rgb(63, 227, 34)";
+    context.fillRect(0, 0, screenWidth, screenHeight);
 }
 
 function snakeInitialize() {
@@ -117,6 +119,7 @@ function snakeUpdate(snakeHeadX, snakeHeadY) {
 
     checkFoodCollision(snakeHeadX, snakeHeadY);
     checkWallCollision(snakeHeadX, snakeHeadY);
+    checkSnakeCollisions(snakeHeadX, snakeHeadY);
 
     var snakeTail = snake.pop();
     snakeTail.x = snakeHeadX;
@@ -208,7 +211,7 @@ function checkWallCollision(snakeHeadX, snakeHeadY) {
     if (snakeHeadX * snakeSize >= screenWidth  || snakeHeadX * snakeSize < 0) {
         setState("GAME OVER");
     }
-    if (snakeHeadY * snakeSize >= screenWidth || snakeHeadY * snakeSize < 0) {
+    if (snakeHeadY * snakeSize >= screenHeight || snakeHeadY * snakeSize < 0) {
         setState("GAME OVER");
     }
 }
@@ -229,17 +232,32 @@ function setState(state) {
     showMenu(state);
 }
 
+/*------------------------------------------------------------------------------
+ * Menu Functions
+ *------------------------------------------------------------------------------
+ */
 function displayMenu(menu) {
     menu.style.visibility = "visible";
+}
+
+function hideMenu(menu) {
+    menu.style.visibility = "hidden";
 }
 
 function showMenu(state) {
     if(state == "GAME OVER") {
         displayMenu(gameOverMenu);
     }
+    else if(state == "PLAY") {
+        displayMenu(playHUD);
+    }
 }
 
 function centerMenuPosition(menu) {
     menu.style.top = (screenHeight / 2) - (menu.offsetHeight / 2) + "px";
     menu.style.left = (screenWidth / 2) - (menu.offsetWidth / 2) + "px";
+}
+
+function drawScoreboard() {
+    scoreboard.innerHTML = "Length: " + snakeLength
 }

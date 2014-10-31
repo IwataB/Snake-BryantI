@@ -12,7 +12,7 @@ body{
     visibility: hidden;
 }
 
-h1, h3 {
+h1, h2, h3 {
     font-family: 'Lobster', cursive;
     font-size: 35px;
     text-alin: center;
