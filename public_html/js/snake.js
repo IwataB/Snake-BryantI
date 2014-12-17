@@ -19,6 +19,8 @@ var gameOverMenu;
 var restartButton;
 var playHUD;
 var scoreboard;
+var startMenu;
+var startButton;
 
 /*-----------------------------------------------------------------------------
  * Game Code
@@ -51,9 +53,23 @@ function gameInitialize() {
     restartButton = document.getElementById("restartButton");
     restartButton.addEventListener("click", gameRestart);
     
+    setState("startMenu");
+    
+    startMenu = document.getElementById("startMenu");
+    centerMenuPosition(startMenu);
+    
+    startButton = document.getElementById("startButton");
+    startButton.addEventListener("click", startGame);
+    
     playHUD = document.getElementById("playHUD");
     scoreboard = document.getElementById("scoreboard");
     
+}
+
+function startGame() {
+    snakeInitialize();
+    foodInitialize();
+    hideMenu(startMenu);
     setState("PLAY");
 }
 
@@ -63,6 +79,7 @@ function gameRestart() {
     hideMenu(gameOverMenu);
     setState("PLAY");
 }
+
 function gameLoop() {
     gameDraw();
     drawScoreboard();
@@ -250,6 +267,9 @@ function showMenu(state) {
     }
     else if(state == "PLAY") {
         displayMenu(playHUD);
+    }
+    else if(state == "startMenu") {
+        displayMenu(startMenu)
     }
 }
 
